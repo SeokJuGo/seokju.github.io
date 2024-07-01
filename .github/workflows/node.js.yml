@@ -1,11 +1,9 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: GitHub Pages deploy
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
@@ -14,23 +12,23 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4.1.3
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: "18.x"
 
-      - name: Installing my packages
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
         run: npm ci
 
-      - name: Extract repository name
-        run: echo "BASE_PATH=/$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2)" >> $GITHUB_ENV
-
-      - name: Build my App
+      - name: Build
         run: npm run build && touch ./out/.nojekyll
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.6.0
         with:
           token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
-          branch: public # The branch the action should deploy to.
-          folder: out # The folder the action should deploy to.
+          branch: gh-pages  # Adjust the branch name if you are deploying to a different branch
+          folder: out  # The folder the action should deploy from
+          clean: true  # Optional: Ensures a clean deploy by removing previous files
+          base_dir: './out'  # Optional: Specifies the base directory for deployment
