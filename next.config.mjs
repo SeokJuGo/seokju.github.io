@@ -7,7 +7,7 @@ const nextConfig = {
         loader: "akamai",
         path: "",
     },
-    assetPrefix: "./",
+    assetPrefix: "/seokju.github.io/",
 };
 
 export default nextConfig;
